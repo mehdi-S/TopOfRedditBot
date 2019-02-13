@@ -23,7 +23,7 @@ const gfycatContructor = (thumbUrl) => {
 };
 
 const replyTopGifFromSubreddit = (subreddit, message) => {
-  var url = "https://www.reddit.com/r/" + subreddit + "/top/.json?t=hour&limit=10";
+  var url = "https://www.reddit.com/r/" + subreddit + "/top/.json?t=day&limit=10";
       axios.get(url,{
         headers: { 'Client-ID': config.redditClientId}
       }).then(response => {
@@ -33,11 +33,13 @@ const replyTopGifFromSubreddit = (subreddit, message) => {
             const imgUri = gfycatContructor(item.data.secure_media.oembed.thumbnail_url);
             console.log("fetch img : " + imgUri);
             message.channel.send(imgUri);
+            console.log("image posted");
             break;
           } else if (item.data.media){
             const imgUri = gfycatContructor(item.data.media.oembed.thumbnail_url);
             console.log("fetch img : " + imgUri);
             message.channel.send(imgUri);
+            console.log("image posted");
             break;
           }
         }
@@ -61,6 +63,7 @@ client.on('message', message => {
 
   if (command === 'k') {
     if (message.channel.name === config.channelToPost) {
+      console.log("schedule started");
       j = schedule.scheduleJob('spamDiscord', config.timeRule, () => {
         replyTopGifFromSubreddit(config.subreddit, message);
       });
@@ -69,6 +72,7 @@ client.on('message', message => {
     if (message.channel.name === config.channelToPost) {
       const jobNames = _.keys(schedule.scheduledJobs);
       for(let name of jobNames) schedule.cancelJob(name);
+      console.log("schedule stopped");
     }
 	}
 });
