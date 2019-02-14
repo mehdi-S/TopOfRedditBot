@@ -59,8 +59,8 @@ client.on('message', message => {
 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
 
 	const args = message.content.slice(config.prefix.length).split(/!+/);
-	const command = args.shift().toLowerCase();
-
+  const command = args.shift().toLowerCase();
+  
   if (command === 'k') {
     if (message.channel.name === config.channelToPost) {
       console.log("schedule started");
