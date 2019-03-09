@@ -55,21 +55,21 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-  if (message.author.username != config.username) return;
+  if (message.author.id != config.username) return;
 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
 
 	const args = message.content.slice(config.prefix.length).split(/!+/);
   const command = args.shift().toLowerCase();
   
   if (command === 'k') {
-    if (message.channel.name === config.channelToPost) {
+    if (message.channel.id === config.channelToPost) {
       console.log("schedule started");
       j = schedule.scheduleJob('spamDiscord', config.timeRule, () => {
         replyTopGifFromSubreddit(config.subreddit, message);
       });
     }
   } else if (command === 's') {
-    if (message.channel.name === config.channelToPost) {
+    if (message.channel.id === config.channelToPost) {
       const jobNames = _.keys(schedule.scheduledJobs);
       for(let name of jobNames) schedule.cancelJob(name);
       console.log("schedule stopped");
